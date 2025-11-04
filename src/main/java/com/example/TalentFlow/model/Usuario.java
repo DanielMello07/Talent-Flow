@@ -2,6 +2,7 @@ package com.example.TalentFlow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.sql.Date;
 
 @Entity
 @Data
@@ -15,6 +16,8 @@ public class Usuario {
     private String email;
     private String senha;
     private String tipoUsuario;
-    private date dataCadastro;
+    private Date dataCadastro;
     private String statusConta;
+
+
 }
