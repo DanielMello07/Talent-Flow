@@ -17,6 +17,4 @@ public class Usuario {
     private String tipoUsuario;
     private date dataCadastro;
     private String statusConta;
-
-    system.out.print("Oiii");
 }
