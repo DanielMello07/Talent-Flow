@@ -19,5 +19,9 @@ public class Usuario {
     private Date dataCadastro;
     private String statusConta;
 
+    public Usuario(){
+
+    }
+
 
 }
