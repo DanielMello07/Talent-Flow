@@ -8,6 +8,5 @@ public class TalentFlowApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TalentFlowApplication.class, args);
-	}
-
+		}
 }

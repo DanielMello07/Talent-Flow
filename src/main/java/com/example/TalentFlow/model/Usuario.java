@@ -1,9 +1,20 @@
 package com.example.TalentFlow.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
 @Data
-public class Usuario {
-
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long codUsuario;
+    private String nomeCompleto;
+    private String email;
+    private String senha;
+    private String tipoUsuario;
+    private date dataCadastro;
+    private String statusConta;
 }
