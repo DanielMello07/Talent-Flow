@@ -18,10 +18,4 @@ public class Usuario {
     private String tipoUsuario;
     private Date dataCadastro;
     private String statusConta;
-
-    public Usuario(){
-
-    }
-
-
 }

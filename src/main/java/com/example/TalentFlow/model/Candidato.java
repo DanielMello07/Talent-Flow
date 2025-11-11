@@ -11,6 +11,12 @@ public class Candidato {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codCandidato;
-    private String telefone;
+    private String rua;
+    private int numero;
+    private String bairro;
+    private String complemento;
+    private String cidade;
+    private String estado;
+    private int cep;
 
 }
