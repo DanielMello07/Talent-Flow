@@ -1,7 +1,8 @@
 package com.example.TalentFlow.controller;
 
-import com.example.TalentFlow.model.Usuario;
-import com.example.TalentFlow.repository.UsuarioRepository;
+import com.example.TalentFlow.dto.UsuarioRequestDTO;
+import com.example.TalentFlow.dto.UsuarioResponseDTO;
+import com.example.TalentFlow.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,43 +10,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    private final UsuarioRepository repository;
+    private final UsuarioService service;
 
-    public UsuarioController(UsuarioRepository repository){
-        this.repository=repository;
+    public UsuarioController(UsuarioService service){
+        this.service=service;
     }
 
     @GetMapping  // define o método GET HTTP
-    public List<Usuario>listar(){
-        return repository.findAll();
+    public List<UsuarioResponseDTO>listar(){
+        return service.listar();
     }
 
     @GetMapping("/{codUsuario}")  // define o método GET HTTP com parametro
-    public Usuario buscar(@PathVariable Long codUsuario){
-        return repository.findById(codUsuario)
-                .orElseThrow(()-> new RuntimeException("Usuario não encontrado!"));
+    public UsuarioResponseDTO buscar(@PathVariable Long codUsuario){
+        return service.buscar(codUsuario);
     }
 
     @PostMapping // define metodo POST HTTP
-    public Usuario salvar(@RequestBody Usuario usuario){
-        return repository.save(usuario);
+    public UsuarioResponseDTO salvar(@RequestBody UsuarioRequestDTO dto){
+        return service.salvar(dto);
     }
 
-    @PutMapping("/{codUsuario}")  // define o método PUT  HTTP com parametro
-    public Usuario atualizar(@PathVariable Long codUsuario, @RequestBody Usuario dados){
-        Usuario usuario=repository.findById(codUsuario)
-                .orElseThrow(()->new RuntimeException("Usuario não encontrado!"));
-        usuario.setNomeCompleto(dados.getNomeCompleto());
-        usuario.setEmail(dados.getEmail());
-        usuario.setSenha(dados.getSenha());
-        usuario.setTipoUsuario(dados.getTipoUsuario());
-        usuario.setDataCadastro(dados.getDataCadastro());
-        usuario.setStatusConta(dados.getStatusConta());
-        return repository.save(usuario);
+    @PutMapping("/{codUsuario}")
+    public UsuarioResponseDTO atualizar(@PathVariable Long codUsuario, @RequestBody UsuarioRequestDTO dto){
+        return service.atualizar(codUsuario, dto);
     }
 
-    @DeleteMapping("/{codUsuario}") // define o método DELETE HTTP com parametro
+    @DeleteMapping("/{codUsuario}")
     public void deletar(@PathVariable Long codUsuario){
-        repository.deleteById(codUsuario);
+        service.deletar(codUsuario);
     }
 }
