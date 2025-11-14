@@ -45,7 +45,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO atualizar(Long codUsuario, UsuarioRequestDTO dto) {
         Usuario usuario = repository.findById(codUsuario)
-                .orElseThrow(()->) new RuntimeException("Usuario não encontrado");
+                .orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
         usuario.setNomeCompleto(dto.getNomeCompleto());
         usuario.setEmail(dto.getEmail());
         if (dto.getSenha()!= null && !dto.getSenha().isBlank()){
