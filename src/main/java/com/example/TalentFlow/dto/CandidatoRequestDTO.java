@@ -1,18 +1,11 @@
-package com.example.TalentFlow.model;
+package com.example.TalentFlow.dto;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import lombok.Data;
+import java.sql.Date;
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Candidato {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CandidatoRequestDTO {
     private Long codCandidato;
     private String nomeCompleto;
     private String email;
@@ -20,10 +13,10 @@ public class Candidato {
     private LocalDateTime dataCadastro;
     private String statusConta;
     private String rua;
-    private int numero;
+    private String numero;
     private String bairro;
     private String complemento;
     private String cidade;
     private String estado;
-    private int cep;
+    private String cep;
 }

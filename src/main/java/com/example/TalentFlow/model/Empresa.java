@@ -11,8 +11,8 @@ public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codEmpresa;
+    private String nome;
     private int cnpj;
-    private String descrcao;
+    private String descricao;
     private String contatoRecrutador;
-
 }

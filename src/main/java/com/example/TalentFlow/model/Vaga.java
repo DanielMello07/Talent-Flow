@@ -20,6 +20,4 @@ public class Vaga {
     private String titulo;
     private String descricao;
     private LocalDateTime dataCandidatura;
-
-
 }
