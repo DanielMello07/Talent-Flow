@@ -20,10 +20,10 @@ public class Candidato {
     private LocalDateTime dataCadastro;
     private String statusConta;
     private String rua;
-    private int numero;
+    private String numero;
     private String bairro;
     private String complemento;
     private String cidade;
     private String estado;
-    private int cep;
+    private String cep;
 }

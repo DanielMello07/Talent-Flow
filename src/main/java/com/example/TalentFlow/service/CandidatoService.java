@@ -38,7 +38,15 @@ public class CandidatoService {
         candidato.setSenha(dto.getSenha());
         candidato.setDataCadastro(dto.getDataCadastro());
         candidato.setStatusConta(dto.getStatusConta());
+        candidato.setRua(dto.getRua());
+        candidato.setNumero(dto.getNumero());
+        candidato.setBairro(dto.getBairro());
+        candidato.setComplemento(dto.getComplemento());
+        candidato.setCidade(dto.getCidade());
+        candidato.setEstado(dto.getEstado());
+
         Candidato salvo = repository.save(candidato);
+
         return toResponseDTO(salvo);
     }
 
