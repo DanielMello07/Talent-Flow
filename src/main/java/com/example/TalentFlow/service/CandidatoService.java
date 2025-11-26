@@ -1,5 +1,7 @@
 package com.example.TalentFlow.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.example.TalentFlow.config.SecurityConfig;
 import com.example.TalentFlow.dto.CandidatoRequestDTO;
 import com.example.TalentFlow.dto.CandidatoResponseDTO;
 import com.example.TalentFlow.model.Candidato;
