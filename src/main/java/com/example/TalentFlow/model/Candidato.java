@@ -2,32 +2,38 @@ package com.example.TalentFlow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Candidato {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codCandidato;
+
     private String nomeCompleto;
-    private String cpf;
     private String email;
-    private String numeroTelefone;
-    private String areaInteresse;
-    private String formacaoAcademica;
-    private String experienciaProfissional;
-    private String enderecoCep;
-    private String enderecoRua;
-    private String enderecoNumero;
-    private String enderecoComplemento;
-    private String enderecoBairro;
-    private String enderecoCidade;
-    private String enderecoEstado;
+    private String senha;
     private LocalDateTime dataCadastro;
     private String statusConta;
+
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String complemento;
+    private String cidade;
+    private String estado;
+    private String cep;
+
+    private String areaInteresse;
+
+    @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL)
+    private List<CandidatoVaga> candidaturas = new ArrayList<>();
 }

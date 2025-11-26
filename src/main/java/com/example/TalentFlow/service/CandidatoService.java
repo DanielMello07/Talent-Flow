@@ -6,100 +6,95 @@ import com.example.TalentFlow.model.Candidato;
 import com.example.TalentFlow.repository.CandidatoRepository;
 import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CandidatoService {
-    private final CandidatoRepository repository;
 
-    public CandidatoService(CandidatoRepository repository){
-        this.repository = repository;
+    private final CandidatoRepository candidatoRepository;
+
+    public CandidatoService(CandidatoRepository candidatoRepository) {
+        this.candidatoRepository = candidatoRepository;
     }
 
-    public List<CandidatoResponseDTO> listarCandidatos(){
-        return repository.findAll()
+    public List<CandidatoResponseDTO> listar() {
+        return candidatoRepository.findAll()
                 .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public CandidatoResponseDTO buscarCandidato(Long codCandidato) {
-        Candidato candidato = repository.findById(codCandidato)
-                .orElseThrow(()->new RuntimeException("Candidato não encontrado!"));
+    public CandidatoResponseDTO buscar(Long id) {
+        Candidato candidato = candidatoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
         return toResponseDTO(candidato);
     }
 
-    public CandidatoResponseDTO salvarCandidato(CandidatoRequestDTO dto) {
+    public CandidatoResponseDTO salvar(CandidatoRequestDTO dto) {
+        if (candidatoRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Email já cadastrado");
+        }
         Candidato candidato = new Candidato();
         candidato.setNomeCompleto(dto.getNomeCompleto());
-        candidato.setCpf(dto.getCpf());
         candidato.setEmail(dto.getEmail());
-        candidato.setNumeroTelefone(dto.getNumeroTelefone());
+        candidato.setSenha(dto.getSenha());
+        candidato.setDataCadastro(LocalDateTime.now());
+        candidato.setStatusConta("ATIVO");
+        candidato.setRua(dto.getRua());
+        candidato.setNumero(dto.getNumero());
+        candidato.setBairro(dto.getBairro());
+        candidato.setComplemento(dto.getComplemento());
+        candidato.setCidade(dto.getCidade());
+        candidato.setEstado(dto.getEstado());
+        candidato.setCep(dto.getCep());
         candidato.setAreaInteresse(dto.getAreaInteresse());
-        candidato.setFormacaoAcademica(dto.getFormacaoAcademica());
-        candidato.setExperienciaProfissional(dto.getExperienciaProfissional());
-        candidato.setEnderecoCep(dto.getEnderecoCep());
-        candidato.setEnderecoRua(dto.getEnderecoRua());
-        candidato.setEnderecoNumero(dto.getEnderecoNumero());
-        candidato.setEnderecoComplemento(dto.getEnderecoComplemento());
-        candidato.setEnderecoBairro(dto.getEnderecoBairro());
-        candidato.setEnderecoCidade(dto.getEnderecoCidade());
-        candidato.setEnderecoEstado(dto.getEnderecoEstado());
-        candidato.setDataCadastro(dto.getDataCadastro());
-        candidato.setStatusConta(dto.getStatusConta());
-        Candidato salvo = repository.save(candidato);
-        return toResponseDTO(salvo);
+
+        return toResponseDTO(candidatoRepository.save(candidato));
     }
 
-    public CandidatoResponseDTO atualizarCandidato(Long codCandidato, CandidatoRequestDTO dto) {
-        Candidato candidato = repository.findById(codCandidato)
-                .orElseThrow(()-> new RuntimeException("Candidato não encontrado!"));
+    public CandidatoResponseDTO atualizar(Long id, CandidatoRequestDTO dto) {
+        Candidato candidato = candidatoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
         candidato.setNomeCompleto(dto.getNomeCompleto());
         candidato.setEmail(dto.getEmail());
-        if (dto.getCpf()!= null && !dto.getCpf().isBlank()){
-            candidato.setCpf(dto.getCpf());
-        }
-        candidato.setNumeroTelefone(dto.getNumeroTelefone());
+        candidato.setSenha(dto.getSenha());
+        candidato.setRua(dto.getRua());
+        candidato.setNumero(dto.getNumero());
+        candidato.setBairro(dto.getBairro());
+        candidato.setComplemento(dto.getComplemento());
+        candidato.setCidade(dto.getCidade());
+        candidato.setEstado(dto.getEstado());
+        candidato.setCep(dto.getCep());
         candidato.setAreaInteresse(dto.getAreaInteresse());
-        candidato.setFormacaoAcademica(dto.getFormacaoAcademica());
-        candidato.setExperienciaProfissional(dto.getExperienciaProfissional());
-        candidato.setEnderecoCep(dto.getEnderecoCep());
-        candidato.setEnderecoRua(dto.getEnderecoRua());
-        candidato.setEnderecoNumero(dto.getEnderecoNumero());
-        candidato.setEnderecoComplemento(dto.getEnderecoComplemento());
-        candidato.setEnderecoBairro(dto.getEnderecoBairro());
-        candidato.setEnderecoCidade(dto.getEnderecoCidade());
-        candidato.setEnderecoEstado(dto.getEnderecoEstado());
-        candidato.setDataCadastro(dto.getDataCadastro());
-        candidato.setStatusConta(dto.getStatusConta());
-        Candidato atualizado = repository.save(candidato);
-        return toResponseDTO(atualizado);
+
+        return toResponseDTO(candidatoRepository.save(candidato));
     }
 
-    public void deletarCandidato(Long codCandidato) {
-        repository.deleteById(codCandidato);
+    public void deletar(Long id) {
+        candidatoRepository.deleteById(id);
+    }
+
+    public Candidato login(String email, String senha) {
+        return candidatoRepository.findByEmailAndSenha(email, senha).orElse(null);
     }
 
     private CandidatoResponseDTO toResponseDTO(Candidato candidato) {
         CandidatoResponseDTO dto = new CandidatoResponseDTO();
         dto.setCodCandidato(candidato.getCodCandidato());
-        candidato.setNomeCompleto(dto.getNomeCompleto());
-        candidato.setEmail(dto.getEmail());
-        candidato.setNumeroTelefone(dto.getNumeroTelefone());
-        candidato.setAreaInteresse(dto.getAreaInteresse());
-        candidato.setFormacaoAcademica(dto.getFormacaoAcademica());
-        candidato.setExperienciaProfissional(dto.getExperienciaProfissional());
-        candidato.setEnderecoCep(dto.getEnderecoCep());
-        candidato.setEnderecoRua(dto.getEnderecoRua());
-        candidato.setEnderecoNumero(dto.getEnderecoNumero());
-        candidato.setEnderecoComplemento(dto.getEnderecoComplemento());
-        candidato.setEnderecoBairro(dto.getEnderecoBairro());
-        candidato.setEnderecoCidade(dto.getEnderecoCidade());
-        candidato.setEnderecoEstado(dto.getEnderecoEstado());
-        candidato.setDataCadastro(dto.getDataCadastro());
-        candidato.setStatusConta(dto.getStatusConta());
+        dto.setNomeCompleto(candidato.getNomeCompleto());
+        dto.setEmail(candidato.getEmail());
+        dto.setDataCadastro(candidato.getDataCadastro());
+        dto.setStatusConta(candidato.getStatusConta());
+        dto.setRua(candidato.getRua());
+        dto.setNumero(candidato.getNumero());
+        dto.setBairro(candidato.getBairro());
+        dto.setComplemento(candidato.getComplemento());
+        dto.setCidade(candidato.getCidade());
+        dto.setEstado(candidato.getEstado());
+        dto.setCep(candidato.getCep());
+        dto.setAreaInteresse(candidato.getAreaInteresse());
         return dto;
     }
 }

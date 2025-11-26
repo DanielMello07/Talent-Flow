@@ -1,7 +1,6 @@
 package com.example.TalentFlow.dto;
 
 import lombok.Data;
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data
@@ -9,18 +8,17 @@ public class CandidatoRequestDTO {
     private Long codCandidato;
     private String nomeCompleto;
     private String email;
-    private String cpf;
-    private String numeroTelefone;
-    private String areaInteresse;
-    private String formacaoAcademica;
-    private String experienciaProfissional;
-    private String enderecoCep;
-    private String enderecoRua;
-    private String enderecoNumero;
-    private String enderecoComplemento;
-    private String enderecoBairro;
-    private String enderecoCidade;
-    private String enderecoEstado;
+    private String senha;
     private LocalDateTime dataCadastro;
     private String statusConta;
+
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String complemento;
+    private String cidade;
+    private String estado;
+    private String cep;
+
+    private String areaInteresse;
 }

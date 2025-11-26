@@ -1,23 +1,31 @@
 package com.example.TalentFlow.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import  java.time.LocalDateTime;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Vaga {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codVaga;
+
     private String titulo;
     private String descricao;
-    private LocalDateTime dataCandidatura;
+    private String area;
+    private boolean ativa = true;
+
+    @ManyToOne
+    @JoinColumn(name = "codEmpresa")
+    private Empresa empresa;
+
+    @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL)
+    private List<CandidatoVaga> candidaturas = new ArrayList<>();
 }
