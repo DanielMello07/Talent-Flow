@@ -18,26 +18,26 @@ public class CandidatoController {
 
     @GetMapping  // define o método GET HTTP
     public List<CandidatoResponseDTO>listar(){
-        return service.listar();
+        return service.listarCandidatos();
     }
 
     @GetMapping("/{codCandidato}")  // define o método GET HTTP com parametro
     public CandidatoResponseDTO buscar(@PathVariable Long codCandidato){
-        return service.buscar(codCandidato);
+        return service.buscarCandidato(codCandidato);
     }
 
     @PostMapping // define metodo POST HTTP
     public CandidatoResponseDTO salvar(@RequestBody CandidatoRequestDTO dto){
-        return service.salvar(dto);
+        return service.salvarCandidato(dto);
     }
 
     @PutMapping("/{codCandidato}")
     public CandidatoResponseDTO atualizar(@PathVariable Long codCandidato, @RequestBody CandidatoRequestDTO dto){
-        return service.atualizar(codCandidato, dto);
+        return service.atualizarCandidato(codCandidato, dto);
     }
 
     @DeleteMapping("/{codCandidato}")
     public void deletar(@PathVariable Long codCandidato){
-        service.deletar(codCandidato);
+        service.deletarCandidato(codCandidato);
     }
 }
