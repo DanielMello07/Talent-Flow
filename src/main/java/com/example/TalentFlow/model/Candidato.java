@@ -2,7 +2,6 @@ package com.example.TalentFlow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +18,15 @@ public class Candidato {
     private Long codCandidato;
 
     private String nomeCompleto;
-    private String email;
-    private String senha;
-    private LocalDateTime dataCadastro;
-    private String statusConta;
 
+    @Column(unique = true)
+    private String email;
+
+    private String senha;
+
+    private LocalDateTime dataCadastro;
+
+    private String statusConta;
     private String rua;
     private String numero;
     private String bairro;
@@ -31,9 +34,8 @@ public class Candidato {
     private String cidade;
     private String estado;
     private String cep;
-
     private String areaInteresse;
 
-    @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "candidato")
     private List<CandidatoVaga> candidaturas = new ArrayList<>();
 }

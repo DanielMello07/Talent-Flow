@@ -37,8 +37,7 @@ public class EmpresaService {
         empresa.setCnpj(dto.getCnpj());
         empresa.setDescricao(dto.getDescricao());
         empresa.setContatoRecrutador(dto.getContatoRecrutador());
-        empresa = empresaRepository.save(empresa);
-        return toResponseDTO(empresa);
+        return toResponseDTO(empresaRepository.save(empresa));
     }
 
     public EmpresaResponseDTO atualizar(Long id, EmpresaRequestDTO dto) {
@@ -48,8 +47,7 @@ public class EmpresaService {
         empresa.setCnpj(dto.getCnpj());
         empresa.setDescricao(dto.getDescricao());
         empresa.setContatoRecrutador(dto.getContatoRecrutador());
-        empresa = empresaRepository.save(empresa);
-        return toResponseDTO(empresa);
+        return toResponseDTO(empresaRepository.save(empresa));
     }
 
     public void deletar(Long id) {
@@ -60,13 +58,13 @@ public class EmpresaService {
         return empresaRepository.findByNomeAndCnpj(nome, cnpj).orElse(null);
     }
 
-    private EmpresaResponseDTO toResponseDTO(Empresa empresa) {
+    private EmpresaResponseDTO toResponseDTO(Empresa e) {
         EmpresaResponseDTO dto = new EmpresaResponseDTO();
-        dto.setCodEmpresa(empresa.getCodEmpresa());
-        dto.setNome(empresa.getNome());
-        dto.setCnpj(empresa.getCnpj());
-        dto.setDescricao(empresa.getDescricao());
-        dto.setContatoRecrutador(empresa.getContatoRecrutador());
+        dto.setCodEmpresa(e.getCodEmpresa());
+        dto.setNome(e.getNome());
+        dto.setCnpj(e.getCnpj());
+        dto.setDescricao(e.getDescricao());
+        dto.setContatoRecrutador(e.getContatoRecrutador());
         return dto;
     }
 }

@@ -7,12 +7,13 @@ import com.example.TalentFlow.model.Vaga;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CandidatoVagaRepository extends JpaRepository<CandidatoVaga, CandidatoVagaId> {
     boolean existsByCandidatoAndVaga(Candidato candidato, Vaga vaga);
-
     List<CandidatoVaga> findByCandidatoCodCandidato(Long codCandidato);
     List<CandidatoVaga> findByVagaCodVaga(Long codVaga);
 
@@ -22,3 +23,4 @@ public interface CandidatoVagaRepository extends JpaRepository<CandidatoVaga, Ca
     @Query("SELECT cv FROM CandidatoVaga cv WHERE cv.vaga.empresa.codEmpresa = :codEmpresa ORDER BY cv.dataAplicacao ASC")
     List<CandidatoVaga> findCandidaturasPorEmpresaOrderByData(@Param("codEmpresa") Long codEmpresa);
 }
+

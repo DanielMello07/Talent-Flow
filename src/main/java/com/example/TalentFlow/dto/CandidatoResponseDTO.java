@@ -10,7 +10,6 @@ public class CandidatoResponseDTO {
     private String email;
     private LocalDateTime dataCadastro;
     private String statusConta;
-
     private String rua;
     private String numero;
     private String bairro;
@@ -18,6 +17,5 @@ public class CandidatoResponseDTO {
     private String cidade;
     private String estado;
     private String cep;
-
     private String areaInteresse;
 }

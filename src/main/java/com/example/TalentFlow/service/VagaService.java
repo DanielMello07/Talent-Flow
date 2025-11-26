@@ -23,8 +23,7 @@ public class VagaService {
     }
 
     public List<VagaResponseDTO> listar() {
-        return vagaRepository.findAll()
-                .stream()
+        return vagaRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

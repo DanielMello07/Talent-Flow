@@ -8,68 +8,68 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidatoService {
 
     private final CandidatoRepository candidatoRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public CandidatoService(CandidatoRepository candidatoRepository) {
         this.candidatoRepository = candidatoRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder(); // hash
     }
 
     public List<CandidatoResponseDTO> listar() {
-        return candidatoRepository.findAll()
-                .stream()
+        return candidatoRepository.findAll().stream()
                 .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public CandidatoResponseDTO buscar(Long id) {
-        Candidato candidato = candidatoRepository.findById(id)
+        Candidato c = candidatoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
-        return toResponseDTO(candidato);
+        return toResponseDTO(c);
     }
 
     public CandidatoResponseDTO salvar(CandidatoRequestDTO dto) {
         if (candidatoRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email já cadastrado");
         }
-        Candidato candidato = new Candidato();
-        candidato.setNomeCompleto(dto.getNomeCompleto());
-        candidato.setEmail(dto.getEmail());
-        candidato.setSenha(dto.getSenha());
-        candidato.setDataCadastro(LocalDateTime.now());
-        candidato.setStatusConta("ATIVO");
-        candidato.setRua(dto.getRua());
-        candidato.setNumero(dto.getNumero());
-        candidato.setBairro(dto.getBairro());
-        candidato.setComplemento(dto.getComplemento());
-        candidato.setCidade(dto.getCidade());
-        candidato.setEstado(dto.getEstado());
-        candidato.setCep(dto.getCep());
-        candidato.setAreaInteresse(dto.getAreaInteresse());
-
-        return toResponseDTO(candidatoRepository.save(candidato));
+        Candidato c = new Candidato();
+        c.setNomeCompleto(dto.getNomeCompleto());
+        c.setEmail(dto.getEmail());
+        c.setSenha(passwordEncoder.encode(dto.getSenha())); // hash
+        c.setDataCadastro(LocalDateTime.now());
+        c.setStatusConta("ATIVA");
+        c.setRua(dto.getRua());
+        c.setNumero(dto.getNumero());
+        c.setBairro(dto.getBairro());
+        c.setComplemento(dto.getComplemento());
+        c.setCidade(dto.getCidade());
+        c.setEstado(dto.getEstado());
+        c.setCep(dto.getCep());
+        c.setAreaInteresse(dto.getAreaInteresse());
+        return toResponseDTO(candidatoRepository.save(c));
     }
 
     public CandidatoResponseDTO atualizar(Long id, CandidatoRequestDTO dto) {
-        Candidato candidato = candidatoRepository.findById(id)
+        Candidato c = candidatoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
-        candidato.setNomeCompleto(dto.getNomeCompleto());
-        candidato.setEmail(dto.getEmail());
-        candidato.setSenha(dto.getSenha());
-        candidato.setRua(dto.getRua());
-        candidato.setNumero(dto.getNumero());
-        candidato.setBairro(dto.getBairro());
-        candidato.setComplemento(dto.getComplemento());
-        candidato.setCidade(dto.getCidade());
-        candidato.setEstado(dto.getEstado());
-        candidato.setCep(dto.getCep());
-        candidato.setAreaInteresse(dto.getAreaInteresse());
-
-        return toResponseDTO(candidatoRepository.save(candidato));
+        c.setNomeCompleto(dto.getNomeCompleto());
+        c.setEmail(dto.getEmail());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            c.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
+        c.setRua(dto.getRua());
+        c.setNumero(dto.getNumero());
+        c.setBairro(dto.getBairro());
+        c.setComplemento(dto.getComplemento());
+        c.setCidade(dto.getCidade());
+        c.setEstado(dto.getEstado());
+        c.setCep(dto.getCep());
+        c.setAreaInteresse(dto.getAreaInteresse());
+        return toResponseDTO(candidatoRepository.save(c));
     }
 
     public void deletar(Long id) {
@@ -77,24 +77,26 @@ public class CandidatoService {
     }
 
     public Candidato login(String email, String senha) {
-        return candidatoRepository.findByEmailAndSenha(email, senha).orElse(null);
+        return candidatoRepository.findByEmail(email)
+                .filter(c -> passwordEncoder.matches(senha, c.getSenha()))
+                .orElse(null);
     }
 
-    private CandidatoResponseDTO toResponseDTO(Candidato candidato) {
+    private CandidatoResponseDTO toResponseDTO(Candidato c) {
         CandidatoResponseDTO dto = new CandidatoResponseDTO();
-        dto.setCodCandidato(candidato.getCodCandidato());
-        dto.setNomeCompleto(candidato.getNomeCompleto());
-        dto.setEmail(candidato.getEmail());
-        dto.setDataCadastro(candidato.getDataCadastro());
-        dto.setStatusConta(candidato.getStatusConta());
-        dto.setRua(candidato.getRua());
-        dto.setNumero(candidato.getNumero());
-        dto.setBairro(candidato.getBairro());
-        dto.setComplemento(candidato.getComplemento());
-        dto.setCidade(candidato.getCidade());
-        dto.setEstado(candidato.getEstado());
-        dto.setCep(candidato.getCep());
-        dto.setAreaInteresse(candidato.getAreaInteresse());
+        dto.setCodCandidato(c.getCodCandidato());
+        dto.setNomeCompleto(c.getNomeCompleto());
+        dto.setEmail(c.getEmail());
+        dto.setDataCadastro(c.getDataCadastro());
+        dto.setStatusConta(c.getStatusConta());
+        dto.setRua(c.getRua());
+        dto.setNumero(c.getNumero());
+        dto.setBairro(c.getBairro());
+        dto.setComplemento(c.getComplemento());
+        dto.setCidade(c.getCidade());
+        dto.setEstado(c.getEstado());
+        dto.setCep(c.getCep());
+        dto.setAreaInteresse(c.getAreaInteresse());
         return dto;
     }
 }

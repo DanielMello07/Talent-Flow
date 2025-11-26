@@ -45,6 +45,8 @@ public class CandidatoController {
 
     @PostMapping("/login")
     public Candidato login(@RequestParam String email, @RequestParam String senha) {
-        return candidatoService.login(email, senha);
+        Candidato c = candidatoService.login(email, senha);
+        if (c == null) throw new RuntimeException("Credenciais inválidas");
+        return c;
     }
 }
