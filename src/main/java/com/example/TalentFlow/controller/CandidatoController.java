@@ -28,7 +28,7 @@ public class CandidatoController {
         return candidatoService.buscar(id);
     }
 
-    @PostMapping
+    @PostMapping ("/")
     public CandidatoResponseDTO salvar(@RequestBody CandidatoRequestDTO dto) {
         return candidatoService.salvar(dto);
     }

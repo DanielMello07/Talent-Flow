@@ -1,11 +1,14 @@
 package com.example.TalentFlow.service;
 
+import com.example.TalentFlow.dto.CandidatoVagaResponseDTO;
 import com.example.TalentFlow.model.Candidato;
 import com.example.TalentFlow.model.CandidatoVaga;
+import com.example.TalentFlow.model.CandidatoVagaId;
 import com.example.TalentFlow.model.Vaga;
 import com.example.TalentFlow.repository.CandidatoRepository;
 import com.example.TalentFlow.repository.CandidatoVagaRepository;
 import com.example.TalentFlow.repository.VagaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,42 +21,48 @@ public class CandidatoVagaService {
     private final VagaRepository vagaRepository;
     private final CandidatoVagaRepository candidatoVagaRepository;
 
-    public CandidatoVagaService(CandidatoRepository candidatoRepository,
-                                VagaRepository vagaRepository,
-                                CandidatoVagaRepository candidatoVagaRepository) {
+    public CandidatoVagaService(
+            CandidatoRepository candidatoRepository,
+            VagaRepository vagaRepository,
+            CandidatoVagaRepository candidatoVagaRepository) {
+
         this.candidatoRepository = candidatoRepository;
         this.vagaRepository = vagaRepository;
         this.candidatoVagaRepository = candidatoVagaRepository;
     }
 
-    public CandidatoVaga candidatar(Long codCandidato, Long codVaga) {
-        Candidato candidato = candidatoRepository.findById(codCandidato)
-                .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
-        Vaga vaga = vagaRepository.findById(codVaga)
-                .orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
+    public ResponseEntity<?> candidatar(Long codCandidato, Long codVaga) {
 
-        if (candidatoVagaRepository.existsByCandidatoAndVaga(candidato, vaga)) {
-            throw new RuntimeException("Você já se candidatou a essa vaga!");
+        var candidato = candidatoRepository.findById(codCandidato);
+        if (candidato.isEmpty()) {
+            return ResponseEntity.status(404).body("Candidato não encontrado");
         }
 
-        CandidatoVaga cv = new CandidatoVaga();
-        cv.setCandidato(candidato);
-        cv.setVaga(vaga);
-        cv.setDataAplicacao(LocalDate.now());
-        cv.setStatus("INSCRITO");
+        var vaga = vagaRepository.findById(codVaga);
+        if (vaga.isEmpty()) {
+            return ResponseEntity.status(404).body("Vaga não encontrada");
+        }
 
-        return candidatoVagaRepository.save(cv);
-    }
+        CandidatoVagaId id = new CandidatoVagaId(codCandidato, codVaga);
 
-    public List<CandidatoVaga> listarCandidatosDaVaga(Long codVaga) {
-        return candidatoVagaRepository.findByVagaOrderByDataAplicacaoAsc(codVaga);
-    }
+        if (candidatoVagaRepository.existsById(id)) {
+            return ResponseEntity.status(409).body("Candidato já inscrito nesta vaga");
+        }
 
-    public List<CandidatoVaga> listarVagasDoCandidato(Long codCandidato) {
-        return candidatoVagaRepository.findByCandidatoCodCandidato(codCandidato);
-    }
+        CandidatoVaga cv = CandidatoVaga.builder()
+                .id(id)
+                .candidato(candidato.get())
+                .vaga(vaga.get())
+                .dataAplicacao(LocalDate.now())
+                .status("Inscrito")
+                .build();
 
-    public List<CandidatoVaga> listarCandidaturasPorEmpresa(Long codEmpresa) {
-        return candidatoVagaRepository.findCandidaturasPorEmpresaOrderByData(codEmpresa);
+        // Salva no banco
+        candidatoVagaRepository.save(cv);
+
+        // Cria o DTO para responder sem gerar loop infinito
+        CandidatoVagaResponseDTO responseDTO = new CandidatoVagaResponseDTO(cv);
+
+        return ResponseEntity.ok(responseDTO);
     }
 }
