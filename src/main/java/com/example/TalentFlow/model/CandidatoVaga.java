@@ -18,12 +18,12 @@ public class CandidatoVaga {
 
     @ManyToOne
     @MapsId("codCandidato")
-    @JoinColumn(name = "codCandidato")
+    @JoinColumn(name = "cod_candidato")
     private Candidato candidato;
 
     @ManyToOne
     @MapsId("codVaga")
-    @JoinColumn(name = "codVaga")
+    @JoinColumn(name = "cod_vaga")
     private Vaga vaga;
 
     private LocalDate dataAplicacao;

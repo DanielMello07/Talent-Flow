@@ -12,10 +12,10 @@ import java.util.Objects;
 @AllArgsConstructor
 public class CandidatoVagaId implements Serializable {
 
-    @Column(name = "codCandidato")
+    @Column(name = "cod_candidato")
     private Long codCandidato;
 
-    @Column(name = "codVaga")
+    @Column(name = "cod_vaga")
     private Long codVaga;
 
     @Override
