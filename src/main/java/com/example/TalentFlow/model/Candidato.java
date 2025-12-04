@@ -26,7 +26,7 @@ public class Candidato {
 
     private LocalDateTime dataCadastro;
 
-    private String statusConta;
+    private String statusConta = "ATIVA";
     private String rua;
     private String numero;
     private String bairro;

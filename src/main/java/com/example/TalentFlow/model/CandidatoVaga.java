@@ -27,5 +27,5 @@ public class CandidatoVaga {
     private Vaga vaga;
 
     private LocalDate dataAplicacao;
-    private String status; // ex: INSCRITO, SELECIONADO, REJEITADO
+    private String status = "INSCITO"; // ex: INSCRITO, SELECIONADO, REJEITADO
 }

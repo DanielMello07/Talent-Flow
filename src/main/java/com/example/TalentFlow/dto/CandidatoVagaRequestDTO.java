@@ -6,6 +6,5 @@ import lombok.Data;
 public class CandidatoVagaRequestDTO {
     private Long codCandidato;
     private Long codVaga;
-    private String status;
     private String dataAplicacao;
 }
