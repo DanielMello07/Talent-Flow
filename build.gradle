@@ -41,6 +41,11 @@ dependencies {
     // --- Testes ---
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Outras dependências...
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    // OU, para projetos mais novos (Jakarta EE):
+    // compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 }
 
 tasks.named('test') {
