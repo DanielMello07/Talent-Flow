@@ -7,30 +7,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Data // Gera getters, setters, toString, equals e hashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Empresa {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codEmpresa;
 
     private String nome;
-
-    @Column(unique = true)
-    private String cnpj; // Login antigo removido
-
+    private String cnpj;
     private String descricao;
     private String contatoRecrutador;
 
-    // --- NOVOS CAMPOS DE SEGURANÇA ---
-    @Column(unique = true, nullable = false)
-    private String emailCorportativo; // Novo Login
+    // NOVO CAMPO PARA LOGIN
+    @Column(unique = true)
+    private String emailCorporativo;
 
-    @JsonIgnore // Nunca enviar a senha no JSON
-    private String senha; // Hash BCrypt
+    private String senha;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     @JsonIgnore

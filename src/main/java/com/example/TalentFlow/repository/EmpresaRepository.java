@@ -7,5 +7,9 @@ import java.util.Optional;
 
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
-    Optional<Empresa> findByNomeAndCnpj(String nome, String cnpj);
+    // Este método permite buscar a empresa pelo novo login (E-mail)
+    Optional<Empresa> findByEmailCorporativo(String emailCorporativo);
+
+    // Útil para validação no cadastro
+    boolean existsByEmailCorporativo(String emailCorporativo);
 }

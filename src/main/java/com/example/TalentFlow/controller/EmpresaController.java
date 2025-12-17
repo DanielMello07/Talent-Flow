@@ -1,59 +1,61 @@
 package com.example.TalentFlow.controller;
 
-import com.example.TalentFlow.dto.EmpresaLoginDTO;
-import com.example.TalentFlow.dto.EmpresaRequestDTO;
-import com.example.TalentFlow.dto.EmpresaResponseDTO;
+import com.example.TalentFlow.dto.*;
 import com.example.TalentFlow.model.Empresa;
 import com.example.TalentFlow.repository.EmpresaRepository;
-import com.example.TalentFlow.service.EmpresaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/empresas")
 @CrossOrigin(origins = "*")
 public class EmpresaController {
 
-    private final EmpresaService empresaService;
     private final EmpresaRepository empresaRepository;
 
-    public EmpresaController(EmpresaService empresaService, EmpresaRepository empresaRepository) {
-        this.empresaService = empresaService;
+    public EmpresaController(EmpresaRepository empresaRepository) {
         this.empresaRepository = empresaRepository;
     }
 
-    @GetMapping
-    public List<EmpresaResponseDTO> listar() {
-        return empresaService.listar();
-    }
-
-    @GetMapping("/{id}")
-    public EmpresaResponseDTO buscar(@PathVariable Long id) {
-        return empresaService.buscar(id);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody EmpresaLoginDTO loginDto) {
+        return empresaRepository.findByEmailCorporativo(loginDto.getEmail())
+                .filter(empresa -> empresa.getSenha().equals(loginDto.getSenha()))
+                .map(empresa -> ResponseEntity.ok((Object) toResponseDTO(empresa)))
+                .orElse(ResponseEntity.status(401).body("E-mail ou senha inválidos."));
     }
 
     @PostMapping
-    public EmpresaResponseDTO salvar(@RequestBody EmpresaRequestDTO dto) {
-        return empresaService.salvar(dto);
+    public ResponseEntity<?> cadastrar(@RequestBody EmpresaRequestDTO dto) {
+        // 1. Validação de duplicidade
+        if (empresaRepository.existsByEmailCorporativo(dto.getEmailCorporativo())) {
+            return ResponseEntity.badRequest().body("Email já cadastrado.");
+        }
+
+        // 2. Mapeamento DTO -> Entity
+        Empresa empresa = new Empresa();
+        empresa.setNome(dto.getNome());
+        empresa.setCnpj(dto.getCnpj());
+        empresa.setEmailCorporativo(dto.getEmailCorporativo());
+        empresa.setSenha(dto.getSenha());
+        empresa.setDescricao(dto.getDescricao());
+        empresa.setContatoRecrutador(dto.getContatoRecrutador());
+
+        // 3. Persistência
+        Empresa empresaSalva = empresaRepository.save(empresa);
+
+        // 4. Retorno seguro (ResponseDTO)
+        return ResponseEntity.status(201).body(toResponseDTO(empresaSalva));
     }
 
-    @PutMapping("/{id}")
-    public EmpresaResponseDTO atualizar(@PathVariable Long id, @RequestBody EmpresaRequestDTO dto) {
-        return empresaService.atualizar(id, dto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        empresaService.deletar(id);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody EmpresaLoginDTO .................loginDto) {
-        return empresaRepository.findByEmailCorporativo(loginDto.getEmail())
-                .filter(empresa -> empresa.getSenha().equals(loginDto.getSenha())) // Nota: Use BCrypt em produção
-                .map(empresa -> ResponseEntity.ok(toResponseDTO(empresa)))
-                .orElse(ResponseEntity.status(401).body("E-mail ou senha inválidos."));
+    private EmpresaResponseDTO toResponseDTO(Empresa e) {
+        EmpresaResponseDTO dto = new EmpresaResponseDTO();
+        dto.setCodEmpresa(e.getCodEmpresa());
+        dto.setNome(e.getNome());
+        dto.setCnpj(e.getCnpj());
+        dto.setEmailCorporativo(e.getEmailCorporativo()); // Adicionado para o Front saber quem logou
+        dto.setDescricao(e.getDescricao());
+        dto.setContatoRecrutador(e.getContatoRecrutador());
+        return dto;
     }
 }

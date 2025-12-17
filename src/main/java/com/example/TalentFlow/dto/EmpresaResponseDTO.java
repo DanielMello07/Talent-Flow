@@ -9,4 +9,5 @@ public class EmpresaResponseDTO {
     private String cnpj;
     private String descricao;
     private String contatoRecrutador;
+    private String emailCorporativo;
 }

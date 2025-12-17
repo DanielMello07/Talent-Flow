@@ -8,4 +8,6 @@ public class EmpresaRequestDTO {
     private String cnpj;
     private String descricao;
     private String contatoRecrutador;
+    private String senha;
+    private String emailCorporativo;
 }

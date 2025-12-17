@@ -4,6 +4,7 @@ import com.example.TalentFlow.dto.EmpresaRequestDTO;
 import com.example.TalentFlow.dto.EmpresaResponseDTO;
 import com.example.TalentFlow.model.Empresa;
 import com.example.TalentFlow.repository.EmpresaRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,8 +55,9 @@ public class EmpresaService {
         empresaRepository.deleteById(id);
     }
 
-    public Empresa login(String nome, String cnpj) {
-        return empresaRepository.findByNomeAndCnpj(nome, cnpj).orElse(null);
+    public Optional<Empresa> realizarLogin(String email, String senha) {
+        return empresaRepository.findByEmailCorporativo(email)
+                .filter(empresa -> empresa.getSenha().equals(senha));
     }
 
     private EmpresaResponseDTO toResponseDTO(Empresa e) {
