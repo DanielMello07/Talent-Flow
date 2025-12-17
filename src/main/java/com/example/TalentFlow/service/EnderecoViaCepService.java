@@ -15,10 +15,11 @@ public class EnderecoViaCepService {
     private final EnderecoViaCepRepository enderecoViaCepRepository;
 
     public EnderecoViaCep buscarEndereco(String cep) {
+        return enderecoViaCepRepository.findById(cep)
+                .orElseGet(() -> {
         ViaCepDTO dto = viaCepClient.buscarEndereco(cep);
 
-        // Converte DTO para entidade
-        EnderecoViaCep endereco = new EnderecoViaCep(
+        EnderecoViaCep novoEndereco = new EnderecoViaCep(
                 dto.getCep(),
                 dto.getLogradouro(),
                 dto.getBairro(),
@@ -26,9 +27,8 @@ public class EnderecoViaCepService {
                 dto.getUf()
         );
 
-        enderecoViaCepRepository.save(endereco);
-        return endereco;
-
+        enderecoViaCepRepository.save(novoEndereco);
+        return novoEndereco;
+        });
     }
 }
-
