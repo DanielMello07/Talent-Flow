@@ -20,7 +20,8 @@ public class Vaga {
     private String titulo;
     private String descricao;
     private String area;
-    private String ativa = "ATIVA";
+    @Builder.Default
+    private boolean ativa = true;
 
     @ManyToOne
     @JoinColumn(name = "codEmpresa")

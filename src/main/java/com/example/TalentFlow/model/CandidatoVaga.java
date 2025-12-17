@@ -2,7 +2,6 @@ package com.example.TalentFlow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -27,5 +26,12 @@ public class CandidatoVaga {
     private Vaga vaga;
 
     private LocalDate dataAplicacao;
-    private String status = "INSCITO"; // ex: INSCRITO, SELECIONADO, REJEITADO
+    private String status = "INSCRITO";
+
+    // --- NOVO CAMPO DE ARQUIVO ---
+    // Armazena o nome do arquivo físico no servidor (ex: "a1b2c3d4.pdf")
+    private String nomeArquivoFisico;
+
+    // Armazena o nome original criptografado ou mascarado (ex: "Curr...Silva.pdf")
+    private String nomeArquivoOriginal;
 }

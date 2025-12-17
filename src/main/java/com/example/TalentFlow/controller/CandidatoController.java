@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/candidatos")
-@CrossOrigin(origins = "http://127.0.0.1:5500") // Adicione esta linha
+@CrossOrigin(origins = "*") // Adicione esta linha
 public class CandidatoController {
 
     private final CandidatoService candidatoService;
@@ -19,7 +19,7 @@ public class CandidatoController {
         this.candidatoService = candidatoService;
     }
 
-    @GetMapping
+    @GetMapping ("/listar")
     public List<CandidatoResponseDTO> listar() {
         return candidatoService.listar();
     }

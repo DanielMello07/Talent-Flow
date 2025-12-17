@@ -82,4 +82,16 @@ public class VagaService {
     public List<Vaga> buscarVagasAtivas() {
         return vagaRepository.findByAtivaTrue();
     }
+
+    public List<VagaResponseDTO> filtrarVagas(String localizacao, String empresaNome, String textoBusca) {
+        // Exemplo simplificado com Stream (pode ser migrado para JPA Specification para performance em grandes bancos)
+        return vagaRepository.findAll().stream()
+                .filter(v -> v.isAtiva()) // Apenas vagas ativas
+                .filter(v -> textoBusca == null || v.getTitulo().toLowerCase().contains(textoBusca.toLowerCase())
+                        || v.getDescricao().toLowerCase().contains(textoBusca.toLowerCase()))
+                .filter(v -> localizacao == null || v.getArea().toLowerCase().contains(localizacao.toLowerCase())) // Assumindo 'Area' como local
+                .filter(v -> empresaNome == null || v.getEmpresa().getNome().equalsIgnoreCase(empresaNome))
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 }
