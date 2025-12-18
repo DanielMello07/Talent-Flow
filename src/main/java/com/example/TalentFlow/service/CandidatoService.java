@@ -1,5 +1,7 @@
 package com.example.TalentFlow.service;
 
+import com.example.TalentFlow.exception.DataIntegrityViolationException;
+import com.example.TalentFlow.exception.ResourceNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.example.TalentFlow.config.SecurityConfig;
 import com.example.TalentFlow.dto.CandidatoRequestDTO;
@@ -30,13 +32,13 @@ public class CandidatoService {
 
     public CandidatoResponseDTO buscar(Long id) {
         Candidato c = candidatoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Candidato não encontrado com o ID: " + id));
         return toResponseDTO(c);
     }
 
     public CandidatoResponseDTO salvar(CandidatoRequestDTO dto) {
         if (candidatoRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Email já cadastrado");
+            throw new DataIntegrityViolationException("Email já cadastrado:" + dto.getEmail());
         }
         Candidato c = new Candidato();
         c.setNomeCompleto(dto.getNomeCompleto());
