@@ -4,6 +4,7 @@ import com.example.TalentFlow.dto.VagaRequestDTO;
 import com.example.TalentFlow.dto.VagaResponseDTO;
 import com.example.TalentFlow.model.Vaga;
 import com.example.TalentFlow.service.VagaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,4 +59,15 @@ public class VagaController {
     public List<Vaga> listarVagasAtivas() {
         return vagaService.buscarVagasAtivas();
     }
+
+    @PutMapping("/{codVaga}/encerrar/empresa/{codEmpresa}")
+    public ResponseEntity<VagaResponseDTO> encerrarVaga(
+            @PathVariable Long codVaga,
+            @PathVariable Long codEmpresa) {
+
+        Vaga vagaEncerrada = vagaService.encerrarVaga(codEmpresa, codVaga);
+        return ResponseEntity.ok(vagaService.buscar(vagaEncerrada.getCodVaga()));
+    }
+
+
 }

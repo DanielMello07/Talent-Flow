@@ -42,6 +42,7 @@ public class VagaService {
         vaga.setDescricao(dto.getDescricao());
         vaga.setArea(dto.getArea());
         vaga.setEmpresa(empresa);
+        vaga.setAtiva(true);
         return toResponseDTO(vagaRepository.save(vaga));
     }
 
@@ -94,4 +95,28 @@ public class VagaService {
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    public Vaga encerrarVaga(Long codEmpresa, Long codVaga) {
+
+        // 1️⃣ Busca a vaga
+        Vaga vaga = vagaRepository.findById(codVaga)
+                .orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
+
+        // 2️⃣ Segurança mínima: vaga pertence à empresa?
+        if (!vaga.getEmpresa().getCodEmpresa().equals(codEmpresa)) {
+            throw new RuntimeException("Acesso negado: vaga não pertence à empresa");
+        }
+
+        // 3️⃣ Já está encerrada?
+        if (!vaga.isAtiva()) {
+            throw new RuntimeException("Vaga já está encerrada");
+        }
+
+        // 4️⃣ Encerra a vaga
+        vaga.setAtiva(false);
+
+        return vagaRepository.save(vaga);
+    }
+
+
 }

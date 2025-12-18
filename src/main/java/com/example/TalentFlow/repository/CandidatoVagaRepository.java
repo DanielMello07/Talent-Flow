@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface CandidatoVagaRepository extends JpaRepository<CandidatoVaga, CandidatoVagaId> {
-    boolean existsByCandidatoAndVaga(Candidato candidato, Vaga vaga);
+    boolean existsByIdCodCandidatoAndIdCodVaga(Long codCandidato, Long codVaga);
     List<CandidatoVaga> findByCandidatoCodCandidato(Long codCandidato);
     List<CandidatoVaga> findByVagaCodVaga(Long codVaga);
 

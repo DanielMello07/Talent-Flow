@@ -1,5 +1,6 @@
 package com.example.TalentFlow.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class Candidato {
     private String cep;
     private String areaInteresse;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "candidato")
     private List<CandidatoVaga> candidaturas = new ArrayList<>();
 }

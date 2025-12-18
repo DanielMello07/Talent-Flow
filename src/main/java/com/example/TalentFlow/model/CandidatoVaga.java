@@ -1,17 +1,21 @@
 package com.example.TalentFlow.model;
 
+import com.example.TalentFlow.enums.StatusCandidatoVaga;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "candidato_vaga")
 public class CandidatoVaga {
 
+    @EqualsAndHashCode.Include
     @EmbeddedId
     private CandidatoVagaId id;
 
@@ -25,8 +29,11 @@ public class CandidatoVaga {
     @JoinColumn(name = "cod_vaga")
     private Vaga vaga;
 
-    private LocalDate dataAplicacao;
-    private String status = "INSCRITO";
+    @Column(name = "data_aplicacao", nullable = false)
+    private LocalDateTime dataAplicacao;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCandidatoVaga status;
 
     // --- NOVO CAMPO DE ARQUIVO ---
     // Armazena o nome do arquivo físico no servidor (ex: "a1b2c3d4.pdf")

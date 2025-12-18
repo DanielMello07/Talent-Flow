@@ -1,5 +1,6 @@
 package com.example.TalentFlow.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,6 @@ public class Vaga {
     private Empresa empresa;
 
     @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CandidatoVaga> candidaturas = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.example.TalentFlow.dto;
 
+import com.example.TalentFlow.enums.StatusCandidatoVaga;
 import com.example.TalentFlow.model.CandidatoVaga;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 public class CandidatoVagaResponseDTO {
     private Long codCandidato;
     private Long codVaga;
-    private String status;
+    private StatusCandidatoVaga status;
     private String dataAplicacao;
 
     public CandidatoVagaResponseDTO(CandidatoVaga cv) {
