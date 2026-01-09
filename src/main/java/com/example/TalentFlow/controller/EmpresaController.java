@@ -4,6 +4,7 @@ import com.example.TalentFlow.dto.*;
 import com.example.TalentFlow.model.Empresa;
 import com.example.TalentFlow.repository.EmpresaRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,15 +13,20 @@ import org.springframework.web.bind.annotation.*;
 public class EmpresaController {
 
     private final EmpresaRepository empresaRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public EmpresaController(EmpresaRepository empresaRepository) {
+    public EmpresaController(EmpresaRepository empresaRepository, BCryptPasswordEncoder passwordEncoder) {
         this.empresaRepository = empresaRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody EmpresaLoginDTO loginDto) {
         return empresaRepository.findByEmailCorporativo(loginDto.getEmail())
-                .filter(empresa -> empresa.getSenha().equals(loginDto.getSenha()))
+                .filter(empresa ->{
+                    // 3. USE O MATCHES EM VEZ DO EQUALS
+                    return passwordEncoder.matches(loginDto.getSenha(), empresa.getSenha());
+                })
                 .map(empresa -> ResponseEntity.ok((Object) toResponseDTO(empresa)))
                 .orElse(ResponseEntity.status(401).body("E-mail ou senha inválidos."));
     }
