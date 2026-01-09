@@ -1,5 +1,6 @@
 package com.example.TalentFlow.service;
 
+import com.example.TalentFlow.dto.EmpresaResponseDTO;
 import com.example.TalentFlow.dto.VagaRequestDTO;
 import com.example.TalentFlow.dto.VagaResponseDTO;
 import com.example.TalentFlow.model.Empresa;
@@ -67,7 +68,20 @@ public class VagaService {
         dto.setTitulo(vaga.getTitulo());
         dto.setDescricao(vaga.getDescricao());
         dto.setArea(vaga.getArea());
-        dto.setCodEmpresa(vaga.getEmpresa() != null ? vaga.getEmpresa().getCodEmpresa() : null);
+
+        // Mapeamento do DTO aninhado
+        if (vaga.getEmpresa() != null) {
+            EmpresaResponseDTO empresaDTO = new EmpresaResponseDTO();
+            empresaDTO.setCodEmpresa(vaga.getEmpresa().getCodEmpresa());
+            empresaDTO.setNome(vaga.getEmpresa().getNome());
+            empresaDTO.setCnpj(vaga.getEmpresa().getCnpj());
+            empresaDTO.setDescricao(vaga.getEmpresa().getDescricao());
+            empresaDTO.setContatoRecrutador(vaga.getEmpresa().getContatoRecrutador());
+            empresaDTO.setEmailCorporativo(vaga.getEmpresa().getEmailCorporativo());
+
+            dto.setEmpresa(empresaDTO); // Adiciona o DTO da empresa dentro do DTO da vaga
+        }
+
         return dto;
     }
 

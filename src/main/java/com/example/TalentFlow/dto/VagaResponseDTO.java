@@ -8,5 +8,5 @@ public class VagaResponseDTO {
     private String titulo;
     private String descricao;
     private String area;
-    private Long codEmpresa;
+    private EmpresaResponseDTO empresa;
 }
