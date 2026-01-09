@@ -36,6 +36,8 @@ public class EmpresaService {
         Empresa empresa = new Empresa();
         empresa.setNome(dto.getNome());
         empresa.setCnpj(dto.getCnpj());
+        empresa.setSenha(dto.getSenha());
+        empresa.setEmailCorporativo(dto.getEmailCorporativo());
         empresa.setDescricao(dto.getDescricao());
         empresa.setContatoRecrutador(dto.getContatoRecrutador());
         return toResponseDTO(empresaRepository.save(empresa));
