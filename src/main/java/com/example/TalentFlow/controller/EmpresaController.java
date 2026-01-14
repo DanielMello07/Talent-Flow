@@ -40,13 +40,16 @@ public class EmpresaController {
 
         // 2. Mapeamento DTO -> Entity
         Empresa empresa = new Empresa();
+
+        String senha = dto.getSenha();
+        String senhaCriptografada = passwordEncoder.encode(senha);
+
         empresa.setNome(dto.getNome());
         empresa.setCnpj(dto.getCnpj());
         empresa.setEmailCorporativo(dto.getEmailCorporativo());
-        empresa.setSenha(dto.getSenha());
+        empresa.setSenha(senhaCriptografada);
         empresa.setDescricao(dto.getDescricao());
         empresa.setContatoRecrutador(dto.getContatoRecrutador());
-
         // 3. Persistência
         Empresa empresaSalva = empresaRepository.save(empresa);
 
