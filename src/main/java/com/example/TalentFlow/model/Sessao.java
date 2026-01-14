@@ -36,7 +36,7 @@ public class Sessao {
     public Sessao() {
         this.token = UUID.randomUUID().toString(); // Gera um código único como: "550e8400-e29b..."
         this.dataCriacao = LocalDateTime.now();
-        this.dataExpiracao = LocalDateTime.now().plusMinutes(30); // Sessão dura 8 horas
+        this.dataExpiracao = LocalDateTime.now().plusMinutes(2); // Sessão dura 8 horas
     }
 
     // Getters e Setters...

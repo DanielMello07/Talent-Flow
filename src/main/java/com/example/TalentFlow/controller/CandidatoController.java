@@ -42,9 +42,17 @@ public class CandidatoController {
         return candidatoService.buscar(id);
     }
 
-    @PostMapping 
-    public CandidatoResponseDTO salvar(@RequestBody CandidatoRequestDTO dto) {
-        return candidatoService.salvar(dto);
+    @PostMapping
+    public ResponseEntity<?> salvar(@RequestBody CandidatoRequestDTO dto) {
+        // 1. Verifica se o e-mail já existe no banco de dados
+        if (candidatoRepository.existsByEmail(dto.getEmail())) {
+            // Retorna erro 400 (Bad Request) com a mensagem
+            return ResponseEntity.badRequest().body(" O e-mail " + dto.getEmail() + " já está cadastrado.");
+        }
+
+        // 2. Se não existir, chama o service para salvar
+        CandidatoResponseDTO salvo = candidatoService.salvar(dto);
+        return ResponseEntity.ok(salvo);
     }
 
     @PutMapping("/{id}")
