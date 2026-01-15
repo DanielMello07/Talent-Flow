@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CandidatoLoginResponseDTO {
     private String token;
+    private Long codCandidato;
     private String nomeCompleto;
     private String areaInteresse;
 }

@@ -23,22 +23,22 @@ public class CandidatoVagaController {
         return service.candidatar(dto.getCodCandidato(), dto.getCodVaga());
     }
 
-    @GetMapping("/candidato/{codCandidato}")
-    public List<CandidatoVaga> listarPorCandidato(@PathVariable Long codCandidato) {
+    @GetMapping("/candidatura-candidato")
+    public List<CandidatoVaga> listarPorCandidato(@RequestBody Long codCandidato) {
         return service.listarPorCandidato(codCandidato);
     }
 
-    @GetMapping("/vaga/{codVaga}/empresa/{codEmpresa}")
+    @GetMapping("/candidatura-empresa")
     public List<CandidatoVaga> listarPorVaga(
-            @PathVariable Long codVaga,
-            @PathVariable Long codEmpresa) {
+            @RequestBody Long codVaga,
+            @RequestBody Long codEmpresa) {
 
         return service.listarPorVaga(codVaga, codEmpresa);
     }
 
-    @PutMapping("/status/empresa/{codEmpresa}")
+    @PutMapping("/candidatura-status")
     public ResponseEntity<CandidatoVaga> alterarStatus(
-            @PathVariable Long codEmpresa,
+            @RequestBody Long codEmpresa,
             @RequestBody AlterarStatusCandidatoVagaDTO dto) {
 
         CandidatoVaga atualizado = service.alterarStatus(

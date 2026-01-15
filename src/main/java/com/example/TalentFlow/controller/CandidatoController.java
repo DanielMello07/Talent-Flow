@@ -112,6 +112,7 @@ public class CandidatoController {
         // 4. Montamos a resposta de sucesso
         CandidatoLoginResponseDTO response = new CandidatoLoginResponseDTO(
                 novaSessao.getToken(),
+                candidato.getCodCandidato(),
                 candidato.getNomeCompleto(),
                 candidato.getAreaInteresse()
         );
