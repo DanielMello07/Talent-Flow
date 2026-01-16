@@ -25,6 +25,7 @@ public class VagaService {
 
     public List<VagaResponseDTO> listar() {
         return vagaRepository.findAll().stream()
+                .filter(vaga -> vaga.isAtiva())
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

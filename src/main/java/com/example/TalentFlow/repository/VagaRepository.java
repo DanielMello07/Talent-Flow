@@ -10,5 +10,7 @@ public interface VagaRepository extends JpaRepository<Vaga, Long> {
     List<Vaga> findByAtivaTrue();
     List<Vaga> findByEmpresaCodEmpresa(Long codEmpresa);
     List<Vaga> findByAreaIgnoreCase(String area);
+
+    long countByEmpresa_CodEmpresa(long codEmpresa);
 }
 

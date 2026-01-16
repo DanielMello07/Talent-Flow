@@ -2,7 +2,10 @@ package com.example.TalentFlow.controller;
 
 import com.example.TalentFlow.dto.*;
 import com.example.TalentFlow.model.Empresa;
+import com.example.TalentFlow.model.Sessao;
 import com.example.TalentFlow.repository.EmpresaRepository;
+import com.example.TalentFlow.repository.SessaoRepository;
+import com.example.TalentFlow.repository.VagaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -13,22 +16,37 @@ import org.springframework.web.bind.annotation.*;
 public class EmpresaController {
 
     private final EmpresaRepository empresaRepository;
+    private final SessaoRepository sessaoRepository;
+    private final VagaRepository vagaRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public EmpresaController(EmpresaRepository empresaRepository, BCryptPasswordEncoder passwordEncoder) {
+    public EmpresaController(EmpresaRepository empresaRepository, BCryptPasswordEncoder passwordEncoder, SessaoRepository sessaoRepository, VagaRepository vagaRepository) {
         this.empresaRepository = empresaRepository;
         this.passwordEncoder = passwordEncoder;
+        this.sessaoRepository = sessaoRepository;
+        this.vagaRepository = vagaRepository;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody EmpresaLoginDTO loginDto) {
-        return empresaRepository.findByEmailCorporativo(loginDto.getEmail())
-                .filter(empresa ->{
-                    // 3. USE O MATCHES EM VEZ DO EQUALS
-                    return passwordEncoder.matches(loginDto.getSenha(), empresa.getSenha());
-                })
-                .map(empresa -> ResponseEntity.ok((Object) toResponseDTO(empresa)))
-                .orElse(ResponseEntity.status(401).body("E-mail ou senha inválidos."));
+    public ResponseEntity<?> login(@RequestBody EmpresaLoginRequestDTO loginDto) {
+        Empresa empresa = empresaRepository.findByEmailCorporativo(loginDto.getEmailCorporativo())
+                .filter(e -> passwordEncoder.matches(loginDto.getSenha(), e.getSenha()))
+                .orElse(null);
+        if (empresa == null){
+            return ResponseEntity.status(401).body("E-mail ou senha inválidos.");
+        }
+
+        Sessao novaSessao = new Sessao();
+        novaSessao.setEmpresa(empresa);
+        sessaoRepository.save(novaSessao);
+
+        EmpresaLoginResponseDTO response = new EmpresaLoginResponseDTO(
+                novaSessao.getToken(),
+                empresa.getCodEmpresa()
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 
     @PostMapping
@@ -66,5 +84,11 @@ public class EmpresaController {
         dto.setDescricao(e.getDescricao());
         dto.setContatoRecrutador(e.getContatoRecrutador());
         return dto;
+    }
+
+    @PostMapping("/vagas")
+    private long vagasAtivas(@RequestBody long codEmpresa){
+        long total = vagaRepository.countByEmpresa_CodEmpresa(codEmpresa);
+        return total;
     }
 }
