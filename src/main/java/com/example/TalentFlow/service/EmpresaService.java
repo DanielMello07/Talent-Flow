@@ -3,7 +3,10 @@ package com.example.TalentFlow.service;
 import com.example.TalentFlow.dto.EmpresaRequestDTO;
 import com.example.TalentFlow.dto.EmpresaResponseDTO;
 import com.example.TalentFlow.model.Empresa;
+import com.example.TalentFlow.model.Vaga;
 import com.example.TalentFlow.repository.EmpresaRepository;
+import com.example.TalentFlow.repository.VagaRepository;
+import com.example.TalentFlow.repository.CandidatoVagaRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,13 @@ import java.util.stream.Collectors;
 public class EmpresaService {
 
     private final EmpresaRepository empresaRepository;
+    private final VagaRepository vagaRepository;
+    private final CandidatoVagaRepository candidatoVagaRepository;
 
-    public EmpresaService(EmpresaRepository empresaRepository) {
+    public EmpresaService(EmpresaRepository empresaRepository, CandidatoVagaRepository candidatoVagaRepository, VagaRepository vagaRepository) {
         this.empresaRepository = empresaRepository;
+        this.vagaRepository = vagaRepository;
+        this.candidatoVagaRepository = candidatoVagaRepository;
     }
 
     public List<EmpresaResponseDTO> listar() {
@@ -71,4 +78,24 @@ public class EmpresaService {
         dto.setContatoRecrutador(e.getContatoRecrutador());
         return dto;
     }
+
+    public long VagasAtivas(long codEmpresa){
+        List<Vaga> vagas = vagaRepository.findByAtivaTrue();
+
+        return vagas.stream()
+                .filter(vaga -> vaga.getEmpresa().getCodEmpresa() == codEmpresa)
+                .count();
+
+    }
+
+    public long CandidaturasVagasAtivas(long codEmpresa){
+        List<Vaga> vagas = vagaRepository.findByAtivaTrue();
+
+        return vagas.stream()
+                .filter(vaga -> vaga.getEmpresa().getCodEmpresa() == codEmpresa)
+                .mapToLong(vaga -> candidatoVagaRepository.candidaturasVagasAtivas(vaga.getCodVaga()))
+                .sum();
+
+    }
+
 }

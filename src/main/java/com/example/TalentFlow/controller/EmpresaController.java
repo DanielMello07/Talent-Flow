@@ -6,6 +6,7 @@ import com.example.TalentFlow.model.Sessao;
 import com.example.TalentFlow.repository.EmpresaRepository;
 import com.example.TalentFlow.repository.SessaoRepository;
 import com.example.TalentFlow.repository.VagaRepository;
+import com.example.TalentFlow.service.EmpresaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,15 @@ public class EmpresaController {
     private final EmpresaRepository empresaRepository;
     private final SessaoRepository sessaoRepository;
     private final VagaRepository vagaRepository;
+    private final EmpresaService empresaService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public EmpresaController(EmpresaRepository empresaRepository, BCryptPasswordEncoder passwordEncoder, SessaoRepository sessaoRepository, VagaRepository vagaRepository) {
+    public EmpresaController(EmpresaRepository empresaRepository, EmpresaService empresaService, BCryptPasswordEncoder passwordEncoder, SessaoRepository sessaoRepository, VagaRepository vagaRepository) {
         this.empresaRepository = empresaRepository;
         this.passwordEncoder = passwordEncoder;
         this.sessaoRepository = sessaoRepository;
         this.vagaRepository = vagaRepository;
+        this.empresaService = empresaService;
     }
 
     @PostMapping("/login")
@@ -86,9 +89,16 @@ public class EmpresaController {
         return dto;
     }
 
-    @PostMapping("/vagas")
-    private long vagasAtivas(@RequestBody long codEmpresa){
-        long total = vagaRepository.countByEmpresa_CodEmpresa(codEmpresa);
-        return total;
+    @GetMapping("/contagem/vagas/{codEmpresa}") // URL fica: /empresas/contagem/1
+    public long contarVagasAtivas(@PathVariable Long codEmpresa) {
+        // Note que agora não usamos @RequestBody, pois o ID vem na URL
+        return empresaService.VagasAtivas(codEmpresa);
     }
+
+    @GetMapping("/contagem/candidaturas/{codEmpresa}") // URL fica: /empresas/contagem/1
+    public long candidaturasVagasAtivas(@PathVariable Long codEmpresa) {
+        // Note que agora não usamos @RequestBody, pois o ID vem na URL
+        return empresaService.CandidaturasVagasAtivas(codEmpresa);
+    }
+
 }

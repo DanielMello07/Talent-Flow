@@ -22,5 +22,8 @@ public interface CandidatoVagaRepository extends JpaRepository<CandidatoVaga, Ca
 
     @Query("SELECT cv FROM CandidatoVaga cv WHERE cv.vaga.empresa.codEmpresa = :codEmpresa ORDER BY cv.dataAplicacao ASC")
     List<CandidatoVaga> findCandidaturasPorEmpresaOrderByData(@Param("codEmpresa") Long codEmpresa);
+
+    @Query("SELECT COUNT(cv) FROM CandidatoVaga cv JOIN cv.vaga v WHERE v.ativa = true AND v.codVaga = :codVaga")
+    int candidaturasVagasAtivas(Long codVaga);
 }
 
