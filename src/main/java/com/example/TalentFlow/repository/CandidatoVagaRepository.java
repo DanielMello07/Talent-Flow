@@ -25,5 +25,7 @@ public interface CandidatoVagaRepository extends JpaRepository<CandidatoVaga, Ca
 
     @Query("SELECT COUNT(cv) FROM CandidatoVaga cv JOIN cv.vaga v WHERE v.ativa = true AND v.codVaga = :codVaga")
     int candidaturasVagasAtivas(Long codVaga);
+
+    Long countByVaga_CodVaga(Long codVaga);
 }
 

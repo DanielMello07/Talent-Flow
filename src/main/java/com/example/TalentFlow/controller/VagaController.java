@@ -60,7 +60,7 @@ public class VagaController {
         return vagaService.buscarVagasAtivas();
     }
 
-    @PutMapping("/{codVaga}/encerrar/empresa/{codEmpresa}")
+    @PutMapping("/encerrar/{codVaga}/empresa/{codEmpresa}")
     public ResponseEntity<VagaResponseDTO> encerrarVaga(
             @PathVariable Long codVaga,
             @PathVariable Long codEmpresa) {
@@ -68,6 +68,5 @@ public class VagaController {
         Vaga vagaEncerrada = vagaService.encerrarVaga(codEmpresa, codVaga);
         return ResponseEntity.ok(vagaService.buscar(vagaEncerrada.getCodVaga()));
     }
-
 
 }

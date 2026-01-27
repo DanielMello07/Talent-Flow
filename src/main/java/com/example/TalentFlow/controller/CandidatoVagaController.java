@@ -51,6 +51,11 @@ public class CandidatoVagaController {
         return ResponseEntity.ok(atualizado);
     }
 
+    @GetMapping("/candidaturas/{codVaga}")
+    public Long CandidaturasVaga(@PathVariable Long codVaga){
+        return service.QtdeCandidaturas(codVaga);
+    }
+
 
 }
 

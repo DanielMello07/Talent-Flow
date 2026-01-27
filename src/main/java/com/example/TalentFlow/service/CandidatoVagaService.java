@@ -87,6 +87,13 @@ public class CandidatoVagaService {
         return candidatoVagaRepository.findByVagaOrderByDataAplicacaoAsc(codVaga);
     }
 
+    public Long QtdeCandidaturas(Long codVaga) {
+        if (!vagaRepository.existsById(codVaga)) {
+            throw new RuntimeException("Vaga não encontrada");
+        }
+        return candidatoVagaRepository.countByVaga_CodVaga(codVaga);
+    }
+
     public CandidatoVaga alterarStatus(
             Long codEmpresa,
             Long codCandidato,
