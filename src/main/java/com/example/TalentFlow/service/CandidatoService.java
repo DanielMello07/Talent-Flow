@@ -3,7 +3,6 @@ package com.example.TalentFlow.service;
 import com.example.TalentFlow.exception.DataIntegrityViolationException;
 import com.example.TalentFlow.exception.ResourceNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.example.TalentFlow.config.SecurityConfig;
 import com.example.TalentFlow.dto.CandidatoRequestDTO;
 import com.example.TalentFlow.dto.CandidatoResponseDTO;
 import com.example.TalentFlow.model.Candidato;
