@@ -45,7 +45,10 @@ dependencies {
     // Outras dependências...
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     // OU, para projetos mais novos (Jakarta EE):
-    // compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    // compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0']
+
+    // para .ENVY
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 }
 
 tasks.named('test') {
