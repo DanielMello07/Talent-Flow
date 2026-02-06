@@ -38,7 +38,7 @@ public class SecurityConfig {
         // Adicione a URL da Vercel aqui junto com o seu local
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://127.0.0.1:5500",
-                "https://seu-projeto.vercel.app" // Troque pelo seu link real da Vercel
+                "https://talentflow-plt5qwnao-daniel-mellos-projects-5844ec07.vercel.app" // Troque pelo seu link real da Vercel
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
