@@ -7,9 +7,14 @@ import com.example.TalentFlow.repository.EmpresaRepository;
 import com.example.TalentFlow.repository.SessaoRepository;
 import com.example.TalentFlow.repository.VagaRepository;
 import com.example.TalentFlow.service.EmpresaService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import static org.hibernate.query.results.Builders.fetch;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/empresas")
@@ -100,5 +105,28 @@ public class EmpresaController {
         // Note que agora não usamos @RequestBody, pois o ID vem na URL
         return empresaService.CandidaturasVagasAtivas(codEmpresa);
     }
+
+    @GetMapping("/informacoes/{codEmpresa}")
+    public ResponseEntity<?> InformacoesEmpresa(@PathVariable Long codEmpresa){
+        try {
+            // 1. Chama o service (Regra de Negócio)
+            EmpresaResponseDTO empresa = empresaService.buscar(codEmpresa);
+
+            // 3. Retorna o envelope com Status 200 (OK) e o JSON
+            return ResponseEntity.ok(empresa);
+
+        } catch (EntityNotFoundException e) {
+            // 4. Se o service não achou, retorna 404 (Not Found)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Empresa não encontrada com o ID: " + codEmpresa);
+
+        } catch (Exception e) {
+            // 5. Se der qualquer outro erro, retorna 500 (Internal Server Error)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar informações.");
+        }
+    }
+
+    @PutMapping("")
 
 }
