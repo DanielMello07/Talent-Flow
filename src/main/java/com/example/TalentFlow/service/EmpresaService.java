@@ -76,6 +76,7 @@ public class EmpresaService {
         dto.setCnpj(e.getCnpj());
         dto.setDescricao(e.getDescricao());
         dto.setContatoRecrutador(e.getContatoRecrutador());
+        dto.setEmailCorporativo(e.getEmailCorporativo());
         return dto;
     }
 
